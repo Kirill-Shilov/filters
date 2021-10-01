@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build: .
+    command: bash -c "yes yes | ./manage.py makemigrations && ./manage.py migrate && ./manage.py setup_data && ./manage.py runserver 0.0.0.0:8000" 
+    volumes:
+      - ./test_table:/code/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
